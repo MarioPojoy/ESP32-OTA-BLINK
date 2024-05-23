@@ -8,7 +8,7 @@
 const int ledPin = LED_BUILTIN;
 int ledState = LOW;
 unsigned long previousMillis = 0;
-const long interval = 2000;
+const long interval = 500;
 const char* hostname = "esp32";
 
 void setup() {
@@ -35,19 +35,20 @@ void setup() {
   ArduinoOTA
     .onStart([]() {
       String type;
-      if (ArduinoOTA.getCommand() == U_FLASH)
+      if (ArduinoOTA.getCommand() == U_FLASH) {
         type = "sketch";
-      else
+      } else {
         type = "filesystem";
+      }
       Serial.println("Start updating " + type);
-    })
-    .onEnd([]() {
+    });
+    ArduinoOTA.onEnd([]() {
       Serial.println("\nEnd");
-    })
-    .onProgress([](unsigned int progress, unsigned int total) {
+    });
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
       Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
-    })
-    .onError([](ota_error_t error) {
+    });
+    ArduinoOTA.onError([](ota_error_t error) {
       Serial.printf("Error[%u]: ", error);
       if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
       else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
